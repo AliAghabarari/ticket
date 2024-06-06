@@ -2,7 +2,7 @@ import tkinter as tk
 import sqlite3
 import os
 from tkinter import messagebox, IntVar, ttk
-
+from datetime import date
 import smtplib, requests
 
 '''
@@ -28,12 +28,12 @@ class Ceremony_data:
     
     def create_table(self):
 
-        self.cur.execute('CREATE TABLE IF NOT EXISTS Ceremony(Ceremony_name TEXT PRIMARY KEY, Address TEXT, Date TEXT, Description TEXT)')
+        self.cur.execute('CREATE TABLE IF NOT EXISTS Ceremony(Ceremony_name TEXT PRIMARY KEY, Address TEXT, Date TEXT, Description TEXT, Price integer)')
         self.con.commit()
     
-    def insert_data(self, Ceremony_name, Address, Date):
+    def insert_data(self, Ceremony_name : str, Address : str, Date, Description : str, Price : int):
 
-        self.cur.execute('INSERT INTO Ceremony VALUES(?, ?, ?)', (Ceremony_name, Address, Date))
+        self.cur.execute('INSERT INTO Ceremony VALUES(?, ?, ?, ?, ?)', (Ceremony_name, Address, Date, Description, Price))
         self.con.commit()
     
     def update_data_ceremony_name(self, ceremony_name, new_name):
@@ -56,4 +56,7 @@ class Ceremony_data:
         self.cur.execute('UPDATE Ceremony SET Description = ? WHERE Ceremony_name = ?', (new_description, ceremony_name))
         self.con.commit()
 
+    def update_data_ticket_price(self, ceremony_name,new_price):
 
+        self.cur.execute('UPDATE Ceremony SET Price = ? WHERE Ceremony_name = ?', (new_price, ceremony_name))
+        self.con.commit()

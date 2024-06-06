@@ -1,3 +1,4 @@
+from math import ceil
 import tkinter as tk
 import sqlite3
 import os
@@ -18,7 +19,6 @@ class Ceremony_data:
         self.path = path
         self.con, self.cur = self.connector()
         self.create = self.create_table()
-
     
     def connector(self):
 
@@ -28,12 +28,12 @@ class Ceremony_data:
     
     def create_table(self):
 
-        self.cur.execute('CREATE TABLE IF NOT EXISTS Ceremony(Ceremony_name TEXT PRIMARY KEY, Address TEXT, Date TEXT, Description TEXT, Price integer)')
+        self.cur.execute('CREATE TABLE IF NOT EXISTS Ceremony(Ceremony_name TEXT PRIMARY KEY, Destination TEXT, Date TEXT, Description TEXT, Price integer)')
         self.con.commit()
     
-    def insert_data(self, Ceremony_name : str, Address : str, Date, Description : str, Price : int):
+    def insert_data(self, Ceremony_name : str, destination : str, Date, Description : str, Price : int):
 
-        self.cur.execute('INSERT INTO Ceremony VALUES(?, ?, ?, ?, ?)', (Ceremony_name, Address, Date, Description, Price))
+        self.cur.execute('INSERT INTO Ceremony VALUES(?, ?, ?, ?, ?)', (Ceremony_name, destination, Date, Description, Price))
         self.con.commit()
     
     def update_data_ceremony_name(self, ceremony_name, new_name):
@@ -41,9 +41,9 @@ class Ceremony_data:
         self.cur.execute('UPDATE Ceremony SET Ceremony_name = ? WHERE Ceremony_name = ?', (new_name, ceremony_name))
         self.con.commit()
 
-    def update_data_ceremony_address(self, ceremony_name,new_address):
+    def update_data_ceremony_destination(self, ceremony_name,new_destination):
 
-        self.cur.execute('UPDATE Ceremony SET Address = ? WHERE Ceremony_name = ?', (new_address, ceremony_name))
+        self.cur.execute('UPDATE Ceremony SET Destination = ? WHERE Ceremony_name = ?', (new_destination, ceremony_name))
         self.con.commit()
 
     def update_data_ceremony_date(self, ceremony_name,new_date):
@@ -60,3 +60,15 @@ class Ceremony_data:
 
         self.cur.execute('UPDATE Ceremony SET Price = ? WHERE Ceremony_name = ?', (new_price, ceremony_name))
         self.con.commit()
+    def close(self):
+
+        self.con.close()
+
+
+
+path = 'C:/Users/salam/Desktop/testing/testing_project.db'
+cerem = Ceremony_data(path)
+
+# cerem.insert_data('hallowin', "newyork", 'lj;asdfpo', 'akjsdfhiuaohf', 905843)
+# cerem.update_data_ceremony_name('hallowin' , 'La Tomatina')
+cerem.close()

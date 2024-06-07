@@ -7,11 +7,7 @@ from datetime import date
 from tkcalendar import Calendar
 import smtplib, requests
 
-'''
-https://7learn.com/blog/tkinter-in-python
 
-
-'''
 
 class Ceremony_data:
 
@@ -19,7 +15,7 @@ class Ceremony_data:
 
         self.path = path
         self.con, self.cur = self.connector()
-        self.create = self.create_table()
+        self.create_table()
     
     def connector(self):
 
@@ -28,16 +24,20 @@ class Ceremony_data:
         return con, cur
     
     def create_table(self):
-
-        self.con.commit()
-    
-    def insert_data(self, Ceremony_name : str, destination : str, Date, Description : str, Price : int):
+        
         self.cur.execute('CREATE TABLE IF NOT EXISTS Ceremony(Ceremony_name TEXT PRIMARY KEY, Destination TEXT, Date TEXT, Description TEXT, Price integer)')
-
-        self.cur.execute('INSERT INTO Ceremony VALUES(?, ?, ?, ?, ?)',
-                          (Ceremony_name, destination, Date, Description, Price))
         self.con.commit()
     
+    def insert_data(self, Ceremony_name : str, destination : str, Date : str, Description : str, Price : int):
+        self.cur.execute('INSERT INTO Ceremony VALUES(?, ?, ?, ?, ?)',
+                         (Ceremony_name, destination, Date, Description, Price))
+        self.con.commit()
+
+    def select_data(self):
+
+        self.cur.execute("SELECT * FROM Ceremony")
+        ceremonies = self.cur.fetchall()
+        return ceremonies
     # def update_data_ceremony_name(self, ceremony_name, new_name):
 
     #     self.cur.execute('UPDATE Ceremony SET Ceremony_name = ? WHERE Ceremony_name = ?', 
@@ -69,7 +69,30 @@ class Ceremony_data:
 
         self.con.close()
 
+class Customer_date:
 
+    def __init__(self, path):
+
+        self.path = path
+        self.con, self.cur = self.connector()
+        self.create_table()
+    
+    
+    def connector(self):
+
+        con = sqlite3.connect(self.path)
+        cur = con.cursor()
+        return con, cur
+    
+    def create_talbe(self):
+
+        self.cur.execute('CRATE TABLE IF NOT EXISTS Customer(Name TEXT PRIMARY KEY, Email TEXT, Number integer)')
+        self.con.commit()
+    
+    def insert_customer(self, name : str, email : str, number : int):
+        
+        self.cur.execute("INSERT INTO Customer VALUES(?, ?, ?)", (name, email, number))
+        self.con.commit()
 
 path = 'C:/Users/salam/Desktop/testing/testing_project.db'
 
@@ -156,3 +179,7 @@ while 1:
         
         ceremony.insert_data(n, dest, d, t, p)
         continue
+
+ceremonies = ceremony.select_data()
+
+print(ceremonies)

@@ -2,7 +2,7 @@ from math import ceil
 import tkinter as tk
 import sqlite3
 import os
-from tkinter import StringVar, messagebox, IntVar, ttk
+from tkinter import messagebox, ttk
 from datetime import date
 from tkcalendar import Calendar
 import smtplib, requests
@@ -29,41 +29,42 @@ class Ceremony_data:
     
     def create_table(self):
 
-        self.cur.execute('CREATE TABLE IF NOT EXISTS Ceremony(Ceremony_name TEXT PRIMARY KEY, Destination TEXT, Date TEXT, Description TEXT, Price integer)')
         self.con.commit()
     
     def insert_data(self, Ceremony_name : str, destination : str, Date, Description : str, Price : int):
+        self.cur.execute('CREATE TABLE IF NOT EXISTS Ceremony(Ceremony_name TEXT PRIMARY KEY, Destination TEXT, Date TEXT, Description TEXT, Price integer)')
 
         self.cur.execute('INSERT INTO Ceremony VALUES(?, ?, ?, ?, ?)',
                           (Ceremony_name, destination, Date, Description, Price))
         self.con.commit()
     
-    def update_data_ceremony_name(self, ceremony_name, new_name):
+    # def update_data_ceremony_name(self, ceremony_name, new_name):
 
-        self.cur.execute('UPDATE Ceremony SET Ceremony_name = ? WHERE Ceremony_name = ?', 
-                         (new_name, ceremony_name))
-        self.con.commit()
+    #     self.cur.execute('UPDATE Ceremony SET Ceremony_name = ? WHERE Ceremony_name = ?', 
+    #                      (new_name, ceremony_name))
+    #     self.con.commit()
 
-    def update_data_ceremony_destination(self, ceremony_name,new_destination):
+    # def update_data_ceremony_destination(self, ceremony_name,new_destination):
 
-        self.cur.execute('UPDATE Ceremony SET Destination = ? WHERE Ceremony_name = ?',
-                          (new_destination, ceremony_name))
-        self.con.commit()
+    #     self.cur.execute('UPDATE Ceremony SET Destination = ? WHERE Ceremony_name = ?',
+    #                       (new_destination, ceremony_name))
+    #     self.con.commit()
 
-    def update_data_ceremony_date(self, ceremony_name,new_date):
+    # def update_data_ceremony_date(self, ceremony_name,new_date):
 
-        self.cur.execute('UPDATE Ceremony SET Date = ? WHERE Ceremony_name = ?', (new_date, ceremony_name))
-        self.con.commit() 
+    #     self.cur.execute('UPDATE Ceremony SET Date = ? WHERE Ceremony_name = ?', (new_date, ceremony_name))
+    #     self.con.commit() 
 
-    def update_data_ceremony_description(self, ceremony_name,new_description):
+    # def update_data_ceremony_description(self, ceremony_name,new_description):
 
-        self.cur.execute('UPDATE Ceremony SET Description = ? WHERE Ceremony_name = ?', (new_description, ceremony_name))
-        self.con.commit()
+    #     self.cur.execute('UPDATE Ceremony SET Description = ? WHERE Ceremony_name = ?', (new_description, ceremony_name))
+    #     self.con.commit()
 
-    def update_data_ticket_price(self, ceremony_name,new_price):
+    # def update_data_ticket_price(self, ceremony_name,new_price):
 
-        self.cur.execute('UPDATE Ceremony SET Price = ? WHERE Ceremony_name = ?', (new_price, ceremony_name))
-        self.con.commit()
+    #     self.cur.execute('UPDATE Ceremony SET Price = ? WHERE Ceremony_name = ?', (new_price, ceremony_name))
+    #     self.con.commit()
+
     def close(self):
 
         self.con.close()
@@ -71,60 +72,87 @@ class Ceremony_data:
 
 
 path = 'C:/Users/salam/Desktop/testing/testing_project.db'
-# cerem = Ceremony_data(path)
-
-# # cerem.insert_data('hallowin', "newyork", 'lj;asdfpo', 'akjsdfhiuaohf', 905843)
-# cerem.update_data_ceremony_destination('hallowin' , 'washingtion')
-# cerem.close()
 
 ceremony = Ceremony_data(path)
 
-root1 = tk.Tk()
-root1.config(bg='powder blue')
-root1.geometry('900x700')
-name = tk.StringVar()
-destination = tk.StringVar()
-price = tk.IntVar()
+while 1:
+    root1 = tk.Tk()
+    root1.config(bg='powder blue')
+    root1.geometry('1500x700')
+    name = tk.StringVar()
+    destination = tk.StringVar()
+    price = tk.IntVar()
 
-#Ceremony name
-ttk.Label(root1, text='Ceremony Name:',font=('Arial', 10, 'bold')).grid(column=0, row=0, padx=5, pady=5)
-ceremony_name_entry = ttk.Entry(root1,font=('Arial', 15, 'bold') ,textvariable=name)
-ceremony_name_entry.grid(column=1, row=0, padx=5, pady=5)
-ceremony_name_entry.focus()
+    #Ceremony name
+    ttk.Label(root1, text='Ceremony Name:',font=('Arial', 10, 'bold')).grid(column=0, row=0,padx=3, pady=4)
+    ceremony_name_entry = ttk.Entry(root1,font=('Arial', 15, 'bold') ,textvariable=name)
+    ceremony_name_entry.grid(column=1, row=0,padx=4,  pady=4)
+    ceremony_name_entry.focus()
 
-#Destination
-ttk.Label(root1, text='Destination: ', font=("Arial", 10, 'bold')).grid(column=3, row=0, padx=3, pady=4)
-destination_entry = ttk.Entry(root1, font=("Arial", 15, 'bold'), textvariable=destination )
-destination_entry.grid(column=4, row=0, padx=4, pady=4)
-destination_entry.focus()
+    #Destination
+    ttk.Label(root1, text='Destination: ', font=("Arial", 10, 'bold')).grid(column=3, row=0, padx=30, pady=4)
+    destination_entry = ttk.Entry(root1, font=("Arial", 15, 'bold'), textvariable=destination )
+    destination_entry.grid(column=4, row=0, padx=4, pady=4)
+    destination_entry.focus()
 
-#Date
-today = date.today()
-ttk.Label(root1,text='Date: ' ,font=("Arial", 20, 'bold')).grid(column=0, row=2, pady=15)
-calender = Calendar(root1, selectmode='day', year=today.year, month=today.month, day=today.day, mindate=today)
-calender.grid(column=1, row=3)
 
-#Price
-ttk.Label(root1, text="Price: ", font=("Arial", 15, "bold")).grid(column=0, row=10, padx=5, pady=50)
-ticket_price = ttk.Entry(root1, font=("Arial", 15, 'bold'), textvariable=price)
-ticket_price.grid(column=1, row=10)
-ticket_price.focus()
+    #Price
+    ttk.Label(root1, text="Price: ", font=("Arial", 15, "bold")).grid(column=0, row=3, padx=5, pady=50)
+    ticket_price = ttk.Entry(root1, font=("Arial", 15, 'bold'), textvariable=price)
+    ticket_price.grid(column=1, row=3)
+    ticket_price.focus()
 
-#Description
-ttk.Label(root1, text="Description: ", font=("Arial", 15, "bold")).grid(column=0, row=15)
-describe = tk.Text(root1, width=50, height=5, font=("Arial", 12))
-describe.grid(column=1, row=16, pady=10)
-describe.focus()
+    #Date
+    today = date.today()
+    ttk.Label(root1,text='Date: ' ,font=("Arial", 20, 'bold')).grid(column=0, row=4, pady=15)
+    calender = Calendar(root1, selectmode='day', year=today.year, month=today.month, day=today.day, mindate=today)
+    calender.grid(column=1, row=5)
 
-root1.mainloop()
+    #Description
+    description = tk.StringVar()
+    tk.Label(root1, text="Description: ", bg='yellow',font=("Arial", 15, "bold")).grid(column=4, row=4)
+    describe = tk.Text(root1, width=50, height=5, font=("Arial", 15), bg='gray' , fg='red')
+    describe.grid(column=5, row=5, ipady=30)
+    describe.focus()
 
-x = name.get()
-print(x)
-y = destination.get()
-print(y)
-z = calender.get_date()
-print(z)
-p = price.get()
-print(p)
-t = describe.get('1.0', tk.END)
-print(t)
+
+    #Countinue(yes/no)
+    var = tk.IntVar()
+    tk.Label(root1,bg='green' , font=("Arial", 12, "bold"), text="Do you want to create\nanother ceremony?").grid(row=6, column=0, pady=40)
+    R1 = tk.Radiobutton(root1, text="yes", variable=var, value=1, bg='lightgreen', font=("Arial", 12))
+    R1.grid(column=0, row=7)
+    R1.focus()
+
+    R2 = tk.Radiobutton(root1, text="no", variable=var, value=2, bg='red', font=("Arial", 12))
+    R2.grid(column=1, row=7)
+    R2.focus()
+    def cont():
+        
+        global t
+        t = describe.get('1.0', 'end-1c')
+        if var.get() == 1:
+            messagebox.showinfo('test', 'continue')
+            root1.destroy()
+        
+        else:
+            messagebox.showinfo('test', 'bye')
+            root1.destroy()
+    b = tk.Button(root1, text='submit', command=cont , bg='gold', font=("Arial", 15))
+    b.grid(column=0, row=8, pady=25)
+
+    root1.mainloop()
+    n = name.get()
+    dest = destination.get()
+    d = calender.get_date()
+    p = price.get()
+    if var.get() == 0: break
+
+    elif var.get() == 2 :
+        
+        ceremony.insert_data(n, dest, d, t, p)
+        break
+    
+    else:
+        
+        ceremony.insert_data(n, dest, d, t, p)
+        continue

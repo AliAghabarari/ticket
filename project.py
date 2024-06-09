@@ -121,15 +121,21 @@ class Customer_date:
         cur = con.cursor()
         return con, cur
     
-    def create_talbe(self):
+    def create_table(self):
 
-        self.cur.execute('CRATE TABLE IF NOT EXISTS Customer(Name TEXT PRIMARY KEY, Email TEXT, Number integer)')
+        self.cur.execute('CREATE TABLE IF NOT EXISTS Customer(Name TEXT PRIMARY KEY, Email TEXT, Number integer)')
         self.con.commit()
     
     def insert_customer(self, name : str, email : str, number : int):
         
         self.cur.execute("INSERT INTO Customer VALUES(?, ?, ?)", (name, email, number))
         self.con.commit()
+    
+    def select(self):
+
+        self.cur.execute('SELECT * FROM Customer')
+        custom =  self.cur.fetchall()
+        return custom
 
 path = 'C:/Users/salam/Desktop/testing/testing_project.db'
 
@@ -170,9 +176,10 @@ while 1:
     calender.grid(column=1, row=5)
 
     #Description
-    description = tk.StringVar()
+    # description = tk.StringVar()
     tk.Label(root1, text="Description: ", bg='yellow',font=("Arial", 15, "bold")).grid(column=4, row=4)
     describe = tk.Text(root1, width=50, height=5, font=("Arial", 15), bg='white' , fg='black')
+    describe.config(bd=5)
     describe.grid(column=5, row=5, ipady=30)
     describe.focus()
 
@@ -239,6 +246,7 @@ while 1:
 
 ceremonies = ceremony.select_data()
 
+customer = Customer_date(path)
 # print(ceremonies)
 if len(ceremonies):
 
@@ -251,25 +259,65 @@ if len(ceremonies):
 
         root2 = tk.Tk()
         root2.config(bg="lightgreen")
-        root2.geometry('800x700')
+        root2.geometry('900x400')
         root2.title('Ticket')
         select = ''
         def selected(event):
             global select
+            global cprice
             select = combo.get()
             cdata = ceremony.select(select)
-            tk.Label(root2, text=f'Ceremony name: {cdata[0]}', font=("Arail", 12), bg='lightgreen').place(x=0, y=100)
-            tk.Label(root2, text=f'Ceremony destination: {cdata[1]}', font=("Arail", 12), bg='lightgreen').place(x=300, y=100)
-            tk.Label(root2, text=f'Ceremony date: {cdata[2]}', font=("Arail", 12), bg='lightgreen').place(x=0, y=130)
-            tk.Label(root2, text=f'Ceremony price: {cdata[4]}', font=("Arail", 12), bg='lightgreen').place(x=300, y=130)
+            cprice = cdata[4]
+            tk.Label(root2, text=f'Ceremony name: {cdata[0]}', font=("Arail", 12, 'bold'), bg='lightgreen').place(x=0, y=100)
+            tk.Label(root2, text=f'Ceremony destination: {cdata[1]}', font=("Arail", 12, 'bold'), bg='lightgreen').place(x=300, y=100)
+            tk.Label(root2, text=f'Ceremony date: {cdata[2]}', font=("Arail", 12, 'bold'), bg='lightgreen').place(x=0, y=120)
+            tk.Label(root2, text=f'Ceremony price: {cdata[4]}', font=("Arail", 12, 'bold'), bg='lightgreen').place(x=300, y=120)
 
-        combo = ttk.Combobox(root2, values=names, width=40)
+        combo = ttk.Combobox(root2, values=names, width=40, font=("Arial", 15, 'bold'))
         combo.bind("<<ComboboxSelected>>", selected)
         combo.current()
-        combo.place(x=250, y=10)
+        combo.place(x=250, y=30)
 
-        b = tk.Button(root2 ,text='test' ,command=lambda:root2.destroy())
-        b.place(x=20, y=50)
+        #User name
+        uname = tk.StringVar()
+        tk.Label(root2, text='Your name: ', font=("Arial", 12, 'bold')).place(x=0, y=180)
+        un = tk.Entry(root2, font=("Arial", 15) ,bg='white', textvariable=uname)
+        un.place(x=100, y=180)
+
+        #Number
+        def s():
+            global num
+            num = spin.get()
+            tk.Label(root2, text=f"Payment: {int(cprice) * int(num)}").place(x=430, y=240)
+
+        tk.Label(root2, text='Your number:', font=("Arial", 12, 'bold')).place(x=350, y=180)
+        spin = tk.Spinbox(root2, from_=0, to=20, width=30, relief='sunken', repeatdelay=500, repeatinterval=400,
+                           bg='lightblue', fg='red', font=("Arial", 12, 'bold'), command=s)
+        spin.config(justify='center', bd=4)
+        spin.place(x=490, y=180)
+        
+        uemail = tk.StringVar()
+        tk.Label(root2, text='Your email: ', font=("Arial", 12, 'bold'), bg='lightyellow').place(x=0, y=240)
+        un = tk.Entry(root2, font=("Arial", 15, 'bold') ,bg='white', textvariable=uemail)
+        un.place(x=100, y=240)
+        
+        def sub():
+            global cn, ce, n
+
+            cn = uname.get()
+            ce = uemail.get()
+            if bool(select) == False:
+                messagebox.showerror("Ceremony not selected", 'Please choose your ceremony.')
+            else:
+                if bool(cn) == False or bool(ce) == False or bool(num) == False:
+                    messagebox.showerror('Blank field', 'Please complete your informations.')
+                else:
+                    messagebox.showinfo('Complete', "You buy the ticket")
+                    root2.destroy()
+
+        button = tk.Button(root2, text='Submit', font=("Arial", 12, 'bold'), command=sub)
+        button.place(x=50, y=280)
+
         root2.mainloop()
         print(bool(select))
         print(select)
@@ -297,9 +345,13 @@ if len(ceremonies):
             b.place(x=120, y=50)
             r1.mainloop()
             if v.get():
+                x += 1
+                i += 1
                 continue
             else: break
         else:
+
+
             names.remove(select)
             i += 1
 

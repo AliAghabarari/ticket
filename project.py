@@ -276,11 +276,11 @@ while 1:
             and bool(var.get()) == True
         ):
             messagebox.showinfo("test", "continue")
+            x = 1
             root1.destroy()
 
         else:
             messagebox.showerror("Blank field", "Please complete the fields")
-        x = 1
 
     b = tk.Button(root1, text="submit", command=cont, bg="gold", font=("Arial", 15))
     b.grid(column=0, row=8, pady=25)

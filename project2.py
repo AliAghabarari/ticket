@@ -399,7 +399,7 @@ def create_customer():
         ctk.CTkLabel(root2, text="Your name: ", bg_color='lightgray',font=("Arial", 15, "bold")).place(
             x=60, y=160
         )
-        un = ctk.CTkEntry(root2, font=("Arial", 15), bg_color='lightgray',width=200,textvariable=uname)
+        un = ctk.CTkEntry(root2, font=("Arial", 15), bg_color='lightgray',width=300,textvariable=uname)
         un.place(x=155, y=160)
 
         # Number
@@ -411,7 +411,7 @@ def create_customer():
             bg_color='lightgray'
         ).place(x=60, y=230)
         ue = ctk.CTkEntry(
-            root2, font=("Arial", 15, "bold"), width=350, textvariable=uemail
+            root2, font=("Arial", 15, "bold"), width=400, textvariable=uemail
             ,bg_color='lightgray'
         )
 

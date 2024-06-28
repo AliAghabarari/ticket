@@ -546,8 +546,11 @@ def create_customer():
         # print(select)
 
 
-btn1 = ctk.CTkButton(croot, text="regster", command=create_customer)
+btn1 = ctk.CTkButton(croot, text="Register", command=create_customer)
 btn1.place(x=200, y=70)
+
+exit_btn = ctk.CTkButton(croot, text="Exit", fg_color='red',command=lambda: croot.destroy())
+exit_btn.place(x=30, y=140)
 croot.mainloop()
 # 6 27 24
 # ['7', '19', '24']

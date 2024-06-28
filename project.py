@@ -400,7 +400,7 @@ if len(ceremonies):
                 text=f"Ceremony name: {cdata[0]}",
                 font=("Arail", 14, "bold"),bg_color='lightgray'
             ).place(x=150, y=70)
-            ctk.CTkLabel(root2, text=f'                         ',
+            ctk.CTkLabel(root2, text=f'                            ',
                          font=("Arial", 14, "bold"), bg_color='lightgray'
             ).place(x=600, y=70)
             ctk.CTkLabel(

@@ -128,7 +128,14 @@ class Customer_data:
         )
         self.con.commit()
 
-    def insert_customer(self, name: str, email: str, ceremony_name: str, ceremony_time: str, ceremony_date: str):
+    def insert_customer(
+        self,
+        name: str,
+        email: str,
+        ceremony_name: str,
+        ceremony_time: str,
+        ceremony_date: str,
+    ):
 
         self.cur.execute(
             "INSERT INTO Customer VALUES(?, ?, ?, ?, ?)",
@@ -141,18 +148,20 @@ class Customer_data:
         self.cur.execute("SELECT * FROM Customer")
         custom = self.cur.fetchall()
         return custom
+
     def select_person(self, Name: str):
 
-        self.cur.execute(
-            "SELECT * FROM Customer WHERE Name = ?", (Name,)
-        )
+        self.cur.execute("SELECT * FROM Customer WHERE Name = ?", (Name,))
         p = self.cur.fetchone()
         return p
+
 
 path = "C:/Users/salam/Desktop/testing/testing_project.db"
 
 croot = ctk.CTk()
-croot.geometry('400x200')
+croot.geometry("400x200")
+
+
 def create_ceremony():
     global ceremony
     ceremony = Ceremony_data(path)
@@ -292,7 +301,6 @@ def create_ceremony():
 
     describe.place(x=170, y=420)
 
-
     x = 0
 
     def cont():
@@ -330,10 +338,12 @@ def create_ceremony():
     root1.mainloop()
 
 
-btn = ctk.CTkButton(croot, text='ceremony', command=create_ceremony)
+btn = ctk.CTkButton(croot, text="ceremony", command=create_ceremony)
 btn.place(x=30, y=70)
 
 val = 0
+
+
 def create_customer():
     global val, ceremony
     ceremony = Ceremony_data(path)
@@ -343,14 +353,14 @@ def create_customer():
     customer = Customer_data(path)
 
     if len(ceremonies) == 0:
-        messagebox.showerror('', 'There is not any ceremony.')
+        messagebox.showerror("", "There is not any ceremony.")
 
     else:
         names = [c[0] for c in ceremonies]
         root2 = ctk.CTk()
         root2.geometry("900x400")
-        frame = ctk.CTkFrame(root2, width=800, height=350, fg_color='lightgray')
-        frame.configure(fg_color='lightgray')
+        frame = ctk.CTkFrame(root2, width=800, height=350, fg_color="lightgray")
+        frame.configure(fg_color="lightgray")
         frame.place(x=50, y=10)
         root2.title("Ticket")
         select = ""
@@ -360,59 +370,74 @@ def create_customer():
             global ctime, cdata
             select = combo.get()
             cdata = ceremony.select(select)
-            ctk.CTkLabel(root2, text=f'                            ',
-                         font=("Arial", 14, "bold"), bg_color='lightgray'
+            ctk.CTkLabel(
+                root2,
+                text=f"                            ",
+                font=("Arial", 14, "bold"),
+                bg_color="lightgray",
             ).place(x=280, y=70)
             ctk.CTkLabel(
                 root2,
                 text=f"Ceremony name: {cdata[0]}",
-                font=("Arail", 14, "bold"),bg_color='lightgray'
+                font=("Arail", 14, "bold"),
+                bg_color="lightgray",
             ).place(x=150, y=70)
-            ctk.CTkLabel(root2, text=f'                            ',
-                         font=("Arial", 14, "bold"), bg_color='lightgray'
+            ctk.CTkLabel(
+                root2,
+                text=f"                            ",
+                font=("Arial", 14, "bold"),
+                bg_color="lightgray",
             ).place(x=600, y=70)
             ctk.CTkLabel(
                 root2,
                 text=f"Ceremony destination: {cdata[1]}",
-                font=("Arail", 14, "bold"),bg_color='lightgray'
+                font=("Arail", 14, "bold"),
+                bg_color="lightgray",
             ).place(x=450, y=70)
             ctk.CTkLabel(
                 root2,
                 text=f"Ceremony date: {cdata[2]}",
-                font=("Arail", 14, "bold"),bg_color='lightgray'
+                font=("Arail", 14, "bold"),
+                bg_color="lightgray",
             ).place(x=150, y=100)
             ctk.CTkLabel(
                 root2,
                 text=f"Ceremony time: {cdata[4]}",
-                font=("Arail", 14, "bold"),bg_color='lightgray'
+                font=("Arail", 14, "bold"),
+                bg_color="lightgray",
             ).place(x=450, y=100)
 
-        combo = ttk.Combobox(root2, values=names, width=30,
-                             font=("Arial", 15, "bold")
-        )
+        combo = ttk.Combobox(root2, values=names, width=30, font=("Arial", 15, "bold"))
         combo.bind("<<ComboboxSelected>>", selected)
         combo.current()
         combo.place(x=300, y=30)
 
         # User name
         uname = tk.StringVar()
-        ctk.CTkLabel(root2, text="Your name: ", bg_color='lightgray',font=("Arial", 15, "bold")).place(
-            x=60, y=160
+        ctk.CTkLabel(
+            root2, text="Your name: ", bg_color="lightgray", font=("Arial", 15, "bold")
+        ).place(x=60, y=160)
+        un = ctk.CTkEntry(
+            root2,
+            font=("Arial", 15),
+            bg_color="lightgray",
+            width=300,
+            textvariable=uname,
         )
-        un = ctk.CTkEntry(root2, font=("Arial", 15), bg_color='lightgray',width=300,textvariable=uname)
         un.place(x=155, y=160)
 
         # Number
 
-
         uemail = ctk.StringVar()
         ctk.CTkLabel(
-            root2, text="Your email: ", font=("Arial", 14, "bold"),
-            bg_color='lightgray'
+            root2, text="Your email: ", font=("Arial", 14, "bold"), bg_color="lightgray"
         ).place(x=60, y=230)
         ue = ctk.CTkEntry(
-            root2, font=("Arial", 15, "bold"), width=400, textvariable=uemail
-            ,bg_color='lightgray'
+            root2,
+            font=("Arial", 15, "bold"),
+            width=400,
+            textvariable=uemail,
+            bg_color="lightgray",
         )
 
         ue.place(x=150, y=230)
@@ -420,8 +445,9 @@ def create_customer():
         cn = ""
         ce = ""
         val = 0
+
         def sub():
-            global cn, ce ,val, select
+            global cn, ce, val, select
 
             cn = un.get()
             ce = ue.get()
@@ -432,7 +458,7 @@ def create_customer():
             else:
                 print(cn)
                 print(ce)
-                if bool(cn) == False or bool(ce) == False :
+                if bool(cn) == False or bool(ce) == False:
                     messagebox.showerror(
                         "Blank field", "Please complete your informations."
                     )
@@ -450,9 +476,7 @@ def create_customer():
                         )
 
                     else:
-                        messagebox.showinfo(
-                            "Complete", f"You buy the ticket."
-                        )
+                        messagebox.showinfo("Complete", f"You buy the ticket.")
                         val = 1
 
                         root2.destroy()
@@ -468,14 +492,14 @@ def create_customer():
                         port_ssl = 465
                         today = date.today()
                         today = str(today)
-                        today = today.split('-')
+                        today = today.split("-")
                         day = today[2]
                         month = today[1][1]
                         year = today[0][2:]
                         print(month, day, year)
 
                         if bool(cust):
-                    # THAT FOR SENDING GMAIL
+                            # THAT FOR SENDING GMAIL
 
                             customer_name = cn
                             customer_email = ce
@@ -508,15 +532,21 @@ def create_customer():
                         names.remove(select)
 
         button = ctk.CTkButton(
-            root2, text="Submit", font=("Arial", 12, "bold"), command=sub,
-            bg_color='lightgray', fg_color='green'
+            root2,
+            text="Submit",
+            font=("Arial", 12, "bold"),
+            command=sub,
+            bg_color="lightgray",
+            fg_color="green",
         )
         button.place(x=300, y=300)
 
         root2.mainloop()
         # print(bool(select))
         # print(select)
-btn1 = ctk.CTkButton(croot, text='regster', command=create_customer)
+
+
+btn1 = ctk.CTkButton(croot, text="regster", command=create_customer)
 btn1.place(x=200, y=70)
 croot.mainloop()
 # 6 27 24
@@ -540,7 +570,7 @@ if bool(cust):
         tyear = str(today.year)[2:]
         cername = i[2]
         certime = i[3]
-        d = i[4].split('/')
+        d = i[4].split("/")
         cerdate = i[4]
         cday = int(d[1])
         cmonth = int(d[0])
@@ -570,7 +600,6 @@ if bool(cust):
                 print("Please check your email or password.")
             except Exception as e:
                 print(f"An strange error: {e}")
-
 
         elif r > 7:
             x = 0
